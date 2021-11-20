@@ -24,4 +24,4 @@ def home():
         return render_template('index.html', country_selected=country, people_vaccinated=people_vaccinated)
 
 
-app.run(debug=True, port=8080)
+# app.run(debug=True, port=8080)
