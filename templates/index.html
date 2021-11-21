@@ -48,37 +48,70 @@
     <!-- Custom styles for this template -->
     <link href="../static/css/home.css" rel="stylesheet">
 
-    <link rel="icon" href="https://cdn-icons.flaticon.com/png/512/4921/premium/4921234.png?token=exp=1637421073~hmac=8b04c93525e15802e483173bfeca62fa">
+    <link rel="icon"
+          href="https://cdn-icons.flaticon.com/png/512/4921/premium/4921234.png?token=exp=1637421073~hmac=8b04c93525e15802e483173bfeca62fa">
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"
+          integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+
+    <script>
+        $(function () {
+            var availableTags = [
+                {% for country in countries %}
+                    "{{ country }}",
+                {% endfor %}
+            ];
+            $("#country_name_input").autocomplete({
+                position: {
+                    my: "left+0 top+10",
+                },
+                source: function (request, response) {
+                    var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex(request.term), "i");
+                    response($.grep(availableTags, function (item) {
+                        return matcher.test(item);
+                        // aici tre sa pui functia slice
+                    }).slice(0, 8));
+                }
+            });
+        });
+    </script>
+
 </head>
 <body class="text-center">
 
 <form class="form-signin" action="/" method="post">
     <img class="d-block mx-auto mb-4" src="../static/img/passport.png" alt="" width="64"
-                 height="64">
+         height="64">
     {% if people_vaccinated == 0 %}
         <h1 class="h3 mb-3 font-weight-normal">Vaccinated in</h1>
     {% elif people_vaccinated == -1 %}
         <h1 class="h3 mb-3 font-weight-normal">We need a valid country.</h1>
     {% else %}
-        <h1 class="h3 mb-3 font-weight-normal">{{country_selected}}: {{ people_vaccinated }}</h1>
+        <h1 class="h3 mb-3 font-weight-normal">{{ country_selected }}: {{ people_vaccinated }}</h1>
     {% endif %}
 
     <label for="country_name_input" class="sr-only">Country</label>
-    <input type="text" id="country_name_input" name="country" class="form-control" placeholder="Country" required autofocus>
-
-
-    <!--    <label>-->
-    <!--      <input type="checkbox" value="remember-me"> Remember me-->
-    <!--    </label>-->
+    <input type="text" id="country_name_input" name="country" class="form-control" placeholder="Country" required
+           autofocus>
     </div>
     <button class="btn btn-lg btn-outline-dark btn-block" type="submit">Search</button>
     <!--  <p class="mt-5 mb-3 text-muted">&copy; 2021</p>-->
+    {% if people_vaccinated > 0 %}
+        <p class="mt-5 mb-3 text-muted">{{ percent }}% vaccinated</p>
+    {% endif %}
 </form>
 
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
+{#<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"#}
+{#        integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"#}
+{#        crossorigin="anonymous"></script>#}
 <!--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>-->
 </body>
 </html>
