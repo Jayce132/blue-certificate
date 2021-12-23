@@ -44,29 +44,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"
           integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 
-    <script>
-        $(function () {
-            var availableTags = [
-                {% for country in countries %}
-                    "{{ country }}",
-                {% endfor %}
-            ];
-            $("#country_name_input").autocomplete({
-                position: {
-                    my: "left+0 top+10",
-                },
-                source: function (request, response) {
-                    var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex(request.term), "i");
-                    response($.grep(availableTags, function (item) {
-                        return matcher.test(item);
-                    })); //.slice(0, 20)
-                }
-            });
-        });
-    </script>
+    <script type="text/javascript">countries = {{ countries|tojson|safe }}</script>
+    <script src='static/javascript/script.js' type="text/javascript"></script>
+
 
 </head>
 <body class="text-center">
